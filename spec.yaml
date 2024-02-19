@@ -1,7 +1,7 @@
 name: rustymailer
 # See https://www.digitalocean.com/docs/app-platform/#regional-availability for the available options
 # You can get region slugs from https://www.digitalocean.com/docs/platform/availability-matrix/
-# `fra` stands for Frankfurt (Germany - EU)
+# `ams3` stands for Amsterdam (Netherlands - EU)
 region: ams3
 services:
   - name: rustymailer
@@ -54,4 +54,4 @@ databases:
     num_nodes: 1
     size: db-s-dev-database
     # Postgres version - using the latest here
-    version: "14"
+    version: "12"
