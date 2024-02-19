@@ -5,7 +5,12 @@ ENV SQLX_OFFLINE true
 RUN cargo install --path .
 
 FROM debian:bullseye-slim
-RUN apt-get update && apt-get install -y extra-runtime-dependencies && rm -rf /var/lib/apt/lists/*
+RUN apt-get update -y \
+        && apt-get install -y --no-install-recommends openssl ca-certificates \
+        # Clean up
+        && apt-get autoremove -y \
+        && apt-get clean -y \
+        && rm -rf /var/lib/apt/lists/*
 COPY --from=builder /usr/local/cargo/bin/rustymailer /usr/local/bin/rustymailer
 COPY configuration configuration
 ENV APP_ENVIRONMENT production
