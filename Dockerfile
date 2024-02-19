@@ -1,23 +1,9 @@
-FROM rust:1.76.0 AS builder
-
-WORKDIR /app
-
+FROM rust:1.67 as builder
+WORKDIR /usr/src/rustymailer
 COPY . .
+RUN cargo install --path .
 
-ENV SQLX_OFFLINE true
-
-RUN cargo build --release
-
-FROM debian:buster-slim AS runtime
-
-WORKDIR /app
-
-RUN apt-get update & apt-get install -y extra-runtime-dependencies & rm -rf /var/lib/apt/lists/*
-
-COPY --from=builder /app/target/release/rustymailer rustymailer
-
-COPY configuration configuration
-
-ENV APP_ENVIRONMENT production
-
-ENTRYPOINT ["./rustymailer"]
+FROM debian:bullseye-slim
+RUN apt-get update && apt-get install -y extra-runtime-dependencies && rm -rf /var/lib/apt/lists/*
+COPY --from=builder /usr/local/cargo/bin/rustymailer /usr/local/bin/rustymailer
+CMD ["rustymailer"]
